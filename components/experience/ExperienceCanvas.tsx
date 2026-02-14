@@ -1,11 +1,11 @@
 "use client";
 
-import * as THREE from "three";
 import { Canvas } from "@react-three/fiber";
-import Experience from "./Experience";
 import { Leva } from "leva";
 import { KeyboardControls } from "@react-three/drei";
 import { Physics } from "@react-three/rapier";
+
+import Experience from "./Experience";
 
 export default function ExperienceCanvas() {
   return (
@@ -21,9 +21,9 @@ export default function ExperienceCanvas() {
       >
         <Canvas
           shadows
-          camera={{ fov: 45, near: 0.1, far: 200, position: [3, 2, 6] }}
+          camera={{ fov: 45, near: 0.1, far: 200, position: [0, 13, 0] }}
         >
-          <Physics debug>
+          <Physics>
             <Experience />
           </Physics>
         </Canvas>

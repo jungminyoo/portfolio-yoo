@@ -15,7 +15,9 @@ export default function Experience() {
       <Lights />
 
       <Floor />
-      <Title content="<Yoo/>" offset={[0, 1, 0]} />
+      <Title content="<Yoo/>" offset={[-0.3, 8, -0.2]} />
+      <Title content="Web" size={0.35} offset={[-0.9, 8, 0.5]} />
+      <Title content="Artist" size={0.35} offset={[0.6, 8, 0.5]} />
 
       <Bound />
     </>

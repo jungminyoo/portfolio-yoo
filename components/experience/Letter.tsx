@@ -1,3 +1,4 @@
+import useExperience from "@/stores/useExperience";
 import { Text3D } from "@react-three/drei";
 import { ThreeElements } from "@react-three/fiber";
 import { RigidBody } from "@react-three/rapier";
@@ -5,14 +6,24 @@ import * as THREE from "three";
 
 interface LetterProps {
   content: string;
+  size?: number;
+  height?: number;
   material: THREE.Material;
   position: ThreeElements["object3D"]["position"];
 }
 
-export default function Letter({ content, material, position }: LetterProps) {
+export default function Letter({
+  content,
+  size = 1,
+  height = 0.5,
+  material,
+  position,
+}: LetterProps) {
+  const is3D = useExperience((state) => state.is3D);
+
   return (
     <RigidBody
-      //   type="fixed"
+      type={is3D ? "dynamic" : "fixed"}
       position={position}
       restitution={0.2}
       rotation={[-Math.PI * 0.5, 0, 0]}
@@ -20,9 +31,8 @@ export default function Letter({ content, material, position }: LetterProps) {
       <Text3D
         font="./fonts/pretendard/pretendard_bold.json"
         material={material}
-        size={1}
-        height={0.5}
-        letterSpacing={-0.1}
+        size={size}
+        height={height}
         castShadow
         receiveShadow
       >

@@ -13,7 +13,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className={`antialiased`}>{children}</body>
+      <body className={`antialiased cursor-none`}>{children}</body>
     </html>
   );
 }

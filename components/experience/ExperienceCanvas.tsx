@@ -6,8 +6,12 @@ import { KeyboardControls } from "@react-three/drei";
 import { Physics } from "@react-three/rapier";
 
 import Experience from "./Experience";
+import CustomCursor from "../web/Cursor";
+import useExperience from "@/stores/useExperience";
 
 export default function ExperienceCanvas() {
+  const to3D = useExperience((state) => state.to3D);
+
   return (
     <>
       <Leva collapsed />
@@ -21,13 +25,15 @@ export default function ExperienceCanvas() {
       >
         <Canvas
           shadows
-          camera={{ fov: 45, near: 0.1, far: 200, position: [0, 13, 0] }}
+          camera={{ fov: 31, near: 0.1, far: 200, position: [0, 20, 0] }}
+          onClick={() => to3D()}
         >
           <Physics>
             <Experience />
           </Physics>
         </Canvas>
       </KeyboardControls>
+      <CustomCursor />
     </>
   );
 }

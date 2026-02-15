@@ -9,7 +9,6 @@ export default function Lights() {
         args={["#ffffff", 2]}
         position={[6.2, 6.2, 4]}
         shadow-mapSize={[2048, 2048]}
-        shadow-radius={10}
       >
         <orthographicCamera
           attach="shadow-camera"

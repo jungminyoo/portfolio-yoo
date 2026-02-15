@@ -1,3 +1,4 @@
+import { FLOOR_SCALE } from "@/resources/constants";
 import floorFragmentShaders from "@/shaders/floor/fragment.glsl";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
@@ -52,7 +53,7 @@ export default function Floor() {
         material={floorMaterial}
         position={[0, 0, 0]}
         rotation-x={-Math.PI * 0.5}
-        scale={[21, 9, 1]}
+        scale={FLOOR_SCALE}
       >
         <planeGeometry />
       </mesh>

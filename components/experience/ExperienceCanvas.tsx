@@ -6,11 +6,12 @@ import { KeyboardControls } from "@react-three/drei";
 import { Physics } from "@react-three/rapier";
 
 import Experience from "./Experience";
-import CustomCursor from "../web/Cursor";
+import Cursor from "../web/Cursor";
 import useExperience from "@/stores/useExperience";
+import { START_CAMERA_HEIGHT } from "@/resources/constants";
 
 export default function ExperienceCanvas() {
-  const to3D = useExperience((state) => state.to3D);
+  const step = useExperience((state) => state.step);
 
   return (
     <>
@@ -25,15 +26,19 @@ export default function ExperienceCanvas() {
       >
         <Canvas
           shadows
-          camera={{ fov: 31, near: 0.1, far: 200, position: [0, 20, 0] }}
-          onClick={() => to3D()}
+          camera={{
+            fov: 31,
+            near: 0.1,
+            far: 200,
+            position: [0, START_CAMERA_HEIGHT, 0],
+          }}
         >
           <Physics>
             <Experience />
           </Physics>
         </Canvas>
       </KeyboardControls>
-      <CustomCursor />
+      {step === "ready" && <Cursor />}
     </>
   );
 }

@@ -1,9 +1,9 @@
-import { useMemo, useState } from "react";
-import * as THREE from "three";
+import { useMemo } from "react";
 import { useLoader } from "@react-three/fiber";
 import { FontLoader } from "three/examples/jsm/loaders/FontLoader.js";
 import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry.js";
 import Letter from "./Letter";
+import { mainMaterial } from "@/resources/materials";
 
 interface TitleProps {
   content: string;
@@ -20,11 +20,6 @@ export default function Title({
   letterSpacing = 0.1,
   offset = [0, 0, 0],
 }: TitleProps) {
-  const [textMaterial] = useState(
-    () => new THREE.MeshStandardMaterial({ roughness: 1 }),
-  );
-
-  // ✅ Text3D와 동일한 폰트를 Title에서도 로드
   const font = useLoader(FontLoader, "./fonts/pretendard/pretendard_bold.json");
 
   const { splittedContent, xPositions } = useMemo(() => {
@@ -33,7 +28,6 @@ export default function Title({
 
     if (n === 0) return { splittedContent, xPositions: [] as number[] };
 
-    // 1) 글자별 실제 폭 측정
     const widths = splittedContent.map((ch) => {
       const geo = new TextGeometry(ch, {
         font,
@@ -47,13 +41,11 @@ export default function Title({
       return w;
     });
 
-    // 2) 전체 폭(글자 폭 합 + 간격 합) 기준으로 가운데 정렬
     const totalWidth =
       widths.reduce((a, b) => a + b, 0) + letterSpacing * Math.max(0, n - 1);
 
     const startX = -totalWidth / 2;
 
-    // 3) 누적 배치: (이전 글자 폭/2) + spacing + (현재 글자 폭/2)
     const xPositions: number[] = new Array(n);
     let cursor = startX;
 
@@ -66,7 +58,6 @@ export default function Title({
     return { splittedContent, xPositions };
   }, [content, letterSpacing, font, size, height]);
 
-  // ✅ 여기서부터가 요청하신 "그 부분" 교체 버전입니다.
   return (
     <>
       {splittedContent.map((letter, index) => {
@@ -79,7 +70,7 @@ export default function Title({
             key={`title-letter-${index}`}
             content={letter}
             size={size}
-            material={textMaterial}
+            material={mainMaterial}
             position={[x, y, z]}
           />
         );

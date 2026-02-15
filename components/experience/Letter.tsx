@@ -19,11 +19,11 @@ export default function Letter({
   material,
   position,
 }: LetterProps) {
-  const is3D = useExperience((state) => state.is3D);
+  const step = useExperience((state) => state.step);
 
   return (
     <RigidBody
-      type={is3D ? "dynamic" : "fixed"}
+      type={step !== "ready" ? "dynamic" : "fixed"}
       position={position}
       restitution={0.2}
       rotation={[-Math.PI * 0.5, 0, 0]}

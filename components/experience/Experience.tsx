@@ -8,6 +8,7 @@ import useExperience from "@/stores/useExperience";
 import Player from "./Player";
 import FakePlane from "./FakePlane";
 import { START_HEIGHT } from "@/resources/constants";
+import StartText from "./StartText";
 
 export default function Experience() {
   const step = useExperience((state) => state.step);
@@ -22,10 +23,15 @@ export default function Experience() {
 
       <Floor />
       <Title content="<Yoo/>" offset={[-0.3, START_HEIGHT, -0.2]} />
-      <Title content="Web" size={0.35} offset={[-0.9, START_HEIGHT, 0.5]} />
-      <Title content="Artist" size={0.35} offset={[0.6, START_HEIGHT, 0.5]} />
+      <Title content="Web" size={0.35} offset={[-0.87, START_HEIGHT, 0.5]} />
+      <Title content="Artist" size={0.35} offset={[0.87, START_HEIGHT, 0.5]} />
 
-      {step === "ready" && <FakePlane />}
+      {step === "ready" && (
+        <>
+          <StartText />
+          <FakePlane />
+        </>
+      )}
       {step !== "ready" && <Player />}
 
       <Bound />

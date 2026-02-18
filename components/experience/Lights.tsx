@@ -25,7 +25,7 @@ export default function Lights() {
       <directionalLight
         ref={light}
         castShadow
-        args={["#ffffff", 2]}
+        args={["#ffffff", 1]}
         position={[12.4, 12.4, 8]}
         shadow-mapSize={[512, 512]}
         shadow-radius={5}
@@ -43,7 +43,7 @@ export default function Lights() {
         </orthographicCamera>
       </directionalLight>
 
-      <ambientLight intensity={2.5} />
+      <ambientLight intensity={1.5} />
     </>
   );
 }

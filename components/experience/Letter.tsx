@@ -23,9 +23,9 @@ export default function Letter({
 
   return (
     <RigidBody
-      type={step !== "ready" ? "dynamic" : "fixed"}
+      type={step !== "ready" && step !== "following" ? "dynamic" : "fixed"}
       position={position}
-      restitution={0.2}
+      restitution={0.1}
       rotation={[-Math.PI * 0.5, 0, 0]}
     >
       <Text3D

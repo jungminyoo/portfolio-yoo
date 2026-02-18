@@ -27,7 +27,8 @@ export default function Lights() {
         castShadow
         args={["#ffffff", 2]}
         position={[12.4, 12.4, 8]}
-        shadow-mapSize={[1024, 1024]}
+        shadow-mapSize={[512, 512]}
+        shadow-radius={5}
       >
         <orthographicCamera
           attach="shadow-camera"

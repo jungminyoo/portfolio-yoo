@@ -1,6 +1,7 @@
-import { START_CAMERA_HEIGHT } from "@/resources/constants";
+import { START_CAMERA_HEIGHT, START_HEIGHT } from "@/resources/constants";
 import { mainMaterial } from "@/resources/materials";
 import useExperience from "@/stores/useExperience";
+import getCameraPosition from "@/utils/getCameraPosition";
 import { useKeyboardControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import {
@@ -14,19 +15,40 @@ import * as THREE from "three";
 export default function Player() {
   const step = useExperience((state) => state.step);
   const cursorFallPosition = useExperience((state) => state.cursorFallPosition);
+  const fall = useExperience((state) => state.fall);
   const landed = useExperience((state) => state.landed);
 
   const [_, getKeys] = useKeyboardControls();
 
   const cursorBody = useRef<RapierRigidBody>(null!);
+  const firstCameraPosition = useRef<THREE.Vector3>(null);
 
   const [smoothedNewPosition] = useState(() => new THREE.Vector3());
   const [targetPosition] = useState(() => new THREE.Vector3());
   const [smoothedCameraPosition] = useState(
     () => new THREE.Vector3(0, START_CAMERA_HEIGHT, 0),
   );
-  const [smoothedCameraTarget] = useState(() => new THREE.Vector3(0, 0, 0));
+  const [smoothedCameraTarget] = useState(
+    () => new THREE.Vector3(0, START_HEIGHT, 0),
+  );
 
+  // following
+  useFrame((state, delta) => {
+    if (step === "falling" || step === "landed") return;
+
+    if (firstCameraPosition.current === null)
+      firstCameraPosition.current = getCameraPosition(cursorFallPosition);
+
+    smoothedCameraPosition.lerp(firstCameraPosition.current, delta * 2);
+    smoothedCameraTarget.lerp(cursorFallPosition, delta * 2);
+
+    state.camera.position.copy(smoothedCameraPosition);
+    state.camera.lookAt(smoothedCameraTarget);
+
+    if (smoothedCameraTarget.distanceTo(cursorFallPosition) < 0.5) fall();
+  });
+
+  // falling -> landed
   useFrame(() => {
     if (step === "landed") return;
 
@@ -41,8 +63,9 @@ export default function Player() {
     }
   });
 
+  // falling & landed
   useFrame((state, delta) => {
-    if (step === "ready") return;
+    if (step === "ready" || step === "following") return;
 
     /**
      * Camera
@@ -50,11 +73,7 @@ export default function Player() {
     const cursorPosition = cursorBody.current.translation();
 
     // 카메라 자체의 position
-    const cameraPosition = new THREE.Vector3();
-    cameraPosition.copy(cursorPosition);
-    cameraPosition.x += 5;
-    cameraPosition.z += 5;
-    cameraPosition.y += 10;
+    const cameraPosition = getCameraPosition(cursorPosition);
 
     // 카메라가 바라보는 위치의 position
     const cameraTarget = new THREE.Vector3();
@@ -68,8 +87,9 @@ export default function Player() {
     state.camera.lookAt(smoothedCameraTarget);
   });
 
+  // after landing
   useFrame((_, delta) => {
-    if (step === "falling") return;
+    if (step === "following" || step === "falling") return;
 
     /**
      * Keyboard Event
@@ -96,7 +116,11 @@ export default function Player() {
       <RigidBody
         ref={cursorBody}
         type={step === "falling" ? "dynamic" : "kinematicPosition"}
-        position={cursorFallPosition}
+        position={[
+          cursorFallPosition.x,
+          cursorFallPosition.y,
+          cursorFallPosition.z,
+        ]}
         scale={[0.1, 0.1, 0.1]}
         colliders={false}
       >

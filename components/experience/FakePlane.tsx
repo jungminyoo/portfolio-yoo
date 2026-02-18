@@ -5,15 +5,15 @@ import { useCallback } from "react";
 
 export default function FakePlane() {
   const step = useExperience((state) => state.step);
-  const fall = useExperience((state) => state.fall);
+  const follow = useExperience((state) => state.follow);
 
   const handleClick = useCallback(
     (event: ThreeEvent<MouseEvent>) => {
       if (step === "ready") {
-        fall(event.point);
+        follow(event.point);
       }
     },
-    [step, fall],
+    [step, follow],
   );
 
   return (

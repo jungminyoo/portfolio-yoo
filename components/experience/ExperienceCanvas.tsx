@@ -4,6 +4,7 @@ import { Canvas } from "@react-three/fiber";
 import { Leva } from "leva";
 import { KeyboardControls } from "@react-three/drei";
 import { Physics } from "@react-three/rapier";
+import * as THREE from "three";
 
 import Experience from "./Experience";
 import Cursor from "../web/Cursor";
@@ -25,7 +26,7 @@ export default function ExperienceCanvas() {
         ]}
       >
         <Canvas
-          shadows
+          shadows={{ type: THREE.PCFShadowMap }}
           camera={{
             fov: 31,
             near: 0.1,

@@ -4,9 +4,10 @@ import * as THREE from "three";
 import { START_HEIGHT } from "@/resources/constants";
 
 interface Experience {
-  step: "ready" | "falling" | "landed";
-  cursorFallPosition: [x: number, y: number, z: number];
-  fall: (clickPosition: THREE.Vector3) => void;
+  step: "ready" | "following" | "falling" | "landed";
+  cursorFallPosition: THREE.Vector3Like;
+  follow: (clickPosition: THREE.Vector3) => void;
+  fall: () => void;
   landed: () => void;
 }
 
@@ -14,18 +15,27 @@ export default create(
   subscribeWithSelector<Experience>((set) => {
     return {
       step: "ready",
-      cursorFallPosition: [0, START_HEIGHT, 0],
+      cursorFallPosition: { x: 0, y: START_HEIGHT, z: 0 },
 
-      fall: (clickPosition) =>
+      follow: (clickPosition) =>
         set((state) =>
           state.step === "ready"
             ? {
+                step: "following",
+                cursorFallPosition: {
+                  x: clickPosition.x,
+                  y: START_HEIGHT,
+                  z: clickPosition.z,
+                },
+              }
+            : {},
+        ),
+
+      fall: () =>
+        set((state) =>
+          state.step === "following"
+            ? {
                 step: "falling",
-                cursorFallPosition: [
-                  clickPosition.x,
-                  START_HEIGHT,
-                  clickPosition.z,
-                ],
               }
             : {},
         ),

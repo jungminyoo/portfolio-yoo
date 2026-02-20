@@ -20,7 +20,10 @@ export default function Title({
   letterSpacing = 0.1,
   offset = [0, 0, 0],
 }: TitleProps) {
-  const font = useLoader(FontLoader, "./fonts/A2Z/A2Z_bold.json");
+  const font = useLoader(
+    FontLoader,
+    "./fonts/Bebas_Neue/Bebas_Neue_Regular.json",
+  );
 
   const { splittedContent, xPositions } = useMemo(() => {
     const splittedContent = content.replaceAll(" ", "").split("");

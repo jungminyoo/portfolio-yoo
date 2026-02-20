@@ -29,7 +29,7 @@ export default function Letter({
       rotation={[-Math.PI * 0.5, 0, 0]}
     >
       <Text3D
-        font="./fonts/A2Z/A2Z_bold.json"
+        font="./fonts/Bebas_Neue/Bebas_Neue_Regular.json"
         material={material}
         size={size}
         height={height}

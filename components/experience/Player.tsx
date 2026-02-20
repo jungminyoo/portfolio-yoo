@@ -1,9 +1,10 @@
 import { START_CAMERA_HEIGHT, START_HEIGHT } from "@/resources/constants";
 import { mainMaterial } from "@/resources/materials";
 import useExperience from "@/stores/useExperience";
+import useMouse from "@/stores/useMouse";
 import getCameraPosition from "@/utils/getCameraPosition";
 import { useKeyboardControls } from "@react-three/drei";
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import {
   CylinderCollider,
   RapierRigidBody,
@@ -13,10 +14,17 @@ import { useRef, useState } from "react";
 import * as THREE from "three";
 
 export default function Player() {
+  const domElement = useThree((state) => state.gl.domElement);
+
   const step = useExperience((state) => state.step);
   const cursorFallPosition = useExperience((state) => state.cursorFallPosition);
   const fall = useExperience((state) => state.fall);
   const landed = useExperience((state) => state.landed);
+
+  const mouseForward = useMouse((state) => state.mouseForward);
+  const mouseRightward = useMouse((state) => state.mouseRightward);
+  const mouseBackward = useMouse((state) => state.mouseBackward);
+  const mouseLeftward = useMouse((state) => state.mouseLeftward);
 
   const [_, getKeys] = useKeyboardControls();
 
@@ -99,11 +107,11 @@ export default function Player() {
     const newPosition = new THREE.Vector3();
     newPosition.copy(targetPosition);
 
-    const speed = delta * 4;
-    if (forward) newPosition.z -= speed;
-    if (rightward) newPosition.x += speed;
-    if (backward) newPosition.z += speed;
-    if (leftward) newPosition.x -= speed;
+    const speed = document.pointerLockElement !== domElement ? 0 : delta * 4;
+    if (forward || mouseForward) newPosition.z -= speed;
+    if (rightward || mouseRightward) newPosition.x += speed;
+    if (backward || mouseBackward) newPosition.z += speed;
+    if (leftward || mouseLeftward) newPosition.x -= speed;
 
     targetPosition.copy(newPosition);
     smoothedNewPosition.lerp(targetPosition, delta * 2);

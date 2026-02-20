@@ -7,11 +7,36 @@ import Bound from "./Bound";
 import useExperience from "@/stores/useExperience";
 import Player from "./Player";
 import FakePlane from "./FakePlane";
-import { START_HEIGHT } from "@/resources/constants";
+import { FLAT_KEYBOARD_MAP, START_HEIGHT } from "@/resources/constants";
 import StartText from "./StartText";
+import { useThree } from "@react-three/fiber";
+import { useEffect } from "react";
+import { updateMousePosition } from "@/stores/useMouse";
 
 export default function Experience() {
+  const domElement = useThree((three) => three.gl.domElement);
+
   const step = useExperience((state) => state.step);
+
+  useEffect(() => {
+    const enterPointerLock = () => domElement.requestPointerLock();
+    const resetKeys = () => {
+      if (document.pointerLockElement !== domElement)
+        FLAT_KEYBOARD_MAP.forEach((code) => {
+          window.dispatchEvent(new KeyboardEvent("keyup", { code }));
+        });
+    };
+
+    domElement.addEventListener("click", enterPointerLock);
+    document.addEventListener("pointerlockchange", resetKeys);
+    domElement.addEventListener("mousemove", updateMousePosition);
+
+    return () => {
+      domElement.removeEventListener("click", enterPointerLock);
+      document.removeEventListener("pointerlockchange", resetKeys);
+      domElement.removeEventListener("mousemove", updateMousePosition);
+    };
+  }, []);
 
   return (
     <>

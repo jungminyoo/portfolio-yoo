@@ -140,9 +140,9 @@ export default function Player() {
         scale={[0.1, 0.1, 0.1]}
         colliders={false}
       >
-        <CylinderCollider args={[1, 4.5]} restitution={0} friction={0} />
+        <CylinderCollider args={[1, 4.15]} restitution={0} friction={0} />
         <mesh castShadow material={mainMaterial} rotation-x={Math.PI * 0.5}>
-          <torusGeometry args={[4, 0.5, 6, 30]} />
+          <torusGeometry args={[4, 0.3, 6, 30]} />
         </mesh>
       </RigidBody>
       <mesh ref={cursorMesh} castShadow material={mainMaterial}>

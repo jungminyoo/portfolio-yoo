@@ -35,7 +35,7 @@ export default function Lights() {
           near={1}
           far={20}
           top={8}
-          right={8}
+          right={10.5}
           bottom={-5}
           left={-8}
         >

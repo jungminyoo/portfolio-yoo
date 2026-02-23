@@ -10,6 +10,7 @@ import Experience from "./Experience";
 import Cursor from "../web/Cursor";
 import useExperience from "@/stores/useExperience";
 import { KEYBOARD_MAP, START_CAMERA_HEIGHT } from "@/resources/constants";
+import WelcomeText from "../web/WelcomeText";
 
 export default function ExperienceCanvas() {
   const step = useExperience((state) => state.step);
@@ -33,7 +34,12 @@ export default function ExperienceCanvas() {
           </Physics>
         </Canvas>
       </KeyboardControls>
-      {step === "ready" && <Cursor />}
+      {step === "ready" && (
+        <>
+          <Cursor />
+          <WelcomeText />
+        </>
+      )}
     </>
   );
 }

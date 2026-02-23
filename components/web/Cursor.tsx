@@ -44,11 +44,11 @@ export default function Cursor() {
     <div className="absolute max-lg:hidden z-10 top-0 left-0">
       <div
         ref={cursorFollower}
-        className="w-[50px] h-[50px] rounded-full bg-[transparent] border-white border-2 border-solid fixed z-50 mix-blend-difference pointer-events-none"
+        className="w-12.5 h-12.5 rounded-full bg-transparent border-white border-2 border-solid fixed z-50 mix-blend-difference pointer-events-none"
       ></div>
       <div
         ref={cursorCustom}
-        className="cursorCustom w-[10px] h-[10px] rounded-full bg-white fixed z-50 mix-blend-difference pointer-events-none"
+        className="cursorCustom w-2.5 h-2.5 rounded-full bg-white fixed z-50 mix-blend-difference pointer-events-none"
       ></div>
     </div>
   );

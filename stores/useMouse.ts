@@ -17,9 +17,11 @@ const useMouse = create<Mouse>((set) => {
     mouseBackward: false,
     mouseLeftward: false,
 
-    setMouseState: (mouseState) => set(() => mouseState),
+    setMouseState: (mouseState) => set(() => ({ ...mouseState })),
   };
 });
+
+let resetTimer: number | null = null;
 
 export const updateMousePosition = (event: MouseEvent) => {
   const { movementX, movementY } = event;
@@ -31,6 +33,16 @@ export const updateMousePosition = (event: MouseEvent) => {
     mouseBackward: movementY > MOUSE_THRESHOLD,
     mouseLeftward: movementX < -MOUSE_THRESHOLD,
   });
+
+  if (resetTimer) window.clearTimeout(resetTimer);
+  resetTimer = window.setTimeout(() => {
+    useMouse.getState().setMouseState({
+      mouseForward: false,
+      mouseRightward: false,
+      mouseBackward: false,
+      mouseLeftward: false,
+    });
+  }, 80);
 };
 
 export default useMouse;

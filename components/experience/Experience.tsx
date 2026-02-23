@@ -47,9 +47,9 @@ export default function Experience() {
       <Lights />
 
       <Floor />
-      <Title content="<Yoo/>" size={1.5} offset={[0, START_HEIGHT, -0.2]} />
-      <Title content="Web" size={0.5} offset={[-0.75, START_HEIGHT, 0.5]} />
-      <Title content="Artist" size={0.5} offset={[0.95, START_HEIGHT, 0.5]} />
+      <Title content="<Yoo/>" size={1.5} offset={[-0.5, START_HEIGHT, -0.2]} />
+      <Title content="Web" size={0.5} offset={[-1.2, START_HEIGHT, 0.5]} />
+      <Title content="Artist" size={0.5} offset={[0.5, START_HEIGHT, 0.5]} />
 
       {step === "ready" && (
         <>

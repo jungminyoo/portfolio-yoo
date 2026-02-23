@@ -29,7 +29,7 @@ export default function ExperienceCanvas() {
             position: [0, START_CAMERA_HEIGHT, 0],
           }}
         >
-          <Physics>
+          <Physics debug={false}>
             <Experience />
           </Physics>
         </Canvas>

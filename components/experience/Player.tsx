@@ -29,10 +29,15 @@ export default function Player() {
   const [_, getKeys] = useKeyboardControls();
 
   const cursorBody = useRef<RapierRigidBody>(null!);
+  const cursorMesh = useRef<THREE.Mesh>(null!);
   const firstCameraPosition = useRef<THREE.Vector3>(null);
 
-  const [smoothedNewPosition] = useState(() => new THREE.Vector3());
+  const [newPosition] = useState(() => new THREE.Vector3());
   const [targetPosition] = useState(() => new THREE.Vector3());
+  const [smoothedNewTorusPosition] = useState(() => new THREE.Vector3());
+  const [smoothedNewPosition] = useState(() => new THREE.Vector3());
+
+  const [cameraTarget] = useState(() => new THREE.Vector3());
   const [smoothedCameraPosition] = useState(
     () => new THREE.Vector3(0, START_CAMERA_HEIGHT, 0),
   );
@@ -63,10 +68,13 @@ export default function Player() {
     const cursorPosition = cursorBody.current.translation();
     const cursorY = cursorPosition.y;
 
+    cursorMesh.current.position.copy(cursorPosition);
+
     if (cursorY < 0.1) {
       cursorPosition.y = 0.1;
       targetPosition.copy(cursorPosition);
       smoothedNewPosition.copy(cursorPosition);
+      smoothedNewTorusPosition.copy(cursorPosition);
       landed();
     }
   });
@@ -84,7 +92,6 @@ export default function Player() {
     const cameraPosition = getCameraPosition(cursorPosition);
 
     // 카메라가 바라보는 위치의 position
-    const cameraTarget = new THREE.Vector3();
     cameraTarget.copy(cursorPosition);
 
     // 카메라가 부드럽게 따라가도록 lerping, delta 사용해서 frame rate 상관없이 움직이도록
@@ -104,19 +111,20 @@ export default function Player() {
      */
     const { forward, backward, leftward, rightward } = getKeys();
 
-    const newPosition = new THREE.Vector3();
     newPosition.copy(targetPosition);
 
     const speed = document.pointerLockElement !== domElement ? 0 : delta * 4;
-    if (forward || mouseForward) newPosition.z -= speed;
-    if (rightward || mouseRightward) newPosition.x += speed;
-    if (backward || mouseBackward) newPosition.z += speed;
-    if (leftward || mouseLeftward) newPosition.x -= speed;
+    if (forward || mouseForward) newPosition.setZ(newPosition.z - speed);
+    if (rightward || mouseRightward) newPosition.setX(newPosition.x + speed);
+    if (backward || mouseBackward) newPosition.setZ(newPosition.z + speed);
+    if (leftward || mouseLeftward) newPosition.setX(newPosition.x - speed);
 
     targetPosition.copy(newPosition);
     smoothedNewPosition.lerp(targetPosition, delta * 2);
+    smoothedNewTorusPosition.lerp(targetPosition, delta * 1.8);
 
-    cursorBody.current.setNextKinematicTranslation(smoothedNewPosition);
+    cursorMesh.current.position.copy(smoothedNewPosition);
+    cursorBody.current.setNextKinematicTranslation(smoothedNewTorusPosition);
   });
 
   return (
@@ -132,11 +140,14 @@ export default function Player() {
         scale={[0.1, 0.1, 0.1]}
         colliders={false}
       >
-        <CylinderCollider args={[1, 1]} restitution={0} friction={0} />
-        <mesh castShadow material={mainMaterial}>
-          <cylinderGeometry args={[1, 1, 2]} />
+        <CylinderCollider args={[1, 4.5]} restitution={0} friction={0} />
+        <mesh castShadow material={mainMaterial} rotation-x={Math.PI * 0.5}>
+          <torusGeometry args={[4, 0.5, 6, 30]} />
         </mesh>
       </RigidBody>
+      <mesh ref={cursorMesh} castShadow material={mainMaterial}>
+        <sphereGeometry args={[0.1, 20, 20]} />
+      </mesh>
     </>
   );
 }

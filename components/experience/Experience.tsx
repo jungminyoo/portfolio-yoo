@@ -20,6 +20,9 @@ export default function Experience() {
 
   useEffect(() => {
     const enterPointerLock = () => domElement.requestPointerLock();
+    const leavePointerLock = (event: MouseEvent) =>
+      event.button === 2 && document.exitPointerLock();
+
     const resetKeys = () => {
       if (document.pointerLockElement !== domElement)
         FLAT_KEYBOARD_MAP.forEach((code) => {
@@ -28,11 +31,13 @@ export default function Experience() {
     };
 
     domElement.addEventListener("click", enterPointerLock);
+    domElement.addEventListener("mousedown", leavePointerLock);
     document.addEventListener("pointerlockchange", resetKeys);
     domElement.addEventListener("mousemove", updateMousePosition);
 
     return () => {
       domElement.removeEventListener("click", enterPointerLock);
+      domElement.removeEventListener("mousedown", leavePointerLock);
       document.removeEventListener("pointerlockchange", resetKeys);
       domElement.removeEventListener("mousemove", updateMousePosition);
     };

@@ -12,6 +12,7 @@ import StartText from "./StartText";
 import { useThree } from "@react-three/fiber";
 import { useEffect } from "react";
 import { updateMousePosition } from "@/stores/useMouse";
+import Environments from "./Environments";
 
 export default function Experience() {
   const domElement = useThree((three) => three.gl.domElement);
@@ -50,6 +51,7 @@ export default function Experience() {
       <OrbitControls makeDefault />
 
       <Lights />
+      <Environments />
 
       <Floor />
       <Title content="<Yoo/>" size={1.5} offset={[-0.5, START_HEIGHT, -0.2]} />

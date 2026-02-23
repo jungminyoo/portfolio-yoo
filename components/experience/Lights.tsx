@@ -42,8 +42,6 @@ export default function Lights() {
           {/* <Helper type={THREE.CameraHelper} /> */}
         </orthographicCamera>
       </directionalLight>
-
-      <ambientLight intensity={1.5} />
     </>
   );
 }

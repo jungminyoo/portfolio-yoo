@@ -14,6 +14,6 @@ vec3 colB = mix(vec3(0.30,0.38,0.65), vec3(0.10,0.60,0.62), (t-0.5)*2.0);
 
 float mask = step(0.5, t);
 
-vec3 finalColor = mix(colA, colB, mask);
+vec3 finalColor = mix(colA, colB, mask) * uIntensity;
 
 diffuseColor.rgb = finalColor;

@@ -11,7 +11,9 @@ export default function Loading() {
     <div
       className={`${ZenLoop.className} absolute top-0 left-0 w-full h-full bg-black flex justify-center items-center transition-opacity duration-500 ${step === "loading" ? "opacity-100" : "opacity-0 pointer-events-none"}`}
     >
-      <span className="text-[9vh] text-center">{progress} %</span>
+      <span className="text-[3vh] lg:text-[4vh] 2xl:text-[5vh] text-center">
+        {progress}%
+      </span>
     </div>
   );
 }

@@ -10,15 +10,9 @@ export default function Cursor() {
 
   const step = useExperience((state) => state.step);
   const loaded = useExperience((state) => state.loaded);
-  const innerHeight = useExperience((state) => state.innerHeight);
 
   const cursorCustom = useRef<HTMLDivElement>(null);
   const cursorFollower = useRef<SVGSVGElement>(null);
-
-  const loadingBarScale = useMemo(
-    () => Math.floor((5 / 9) * innerHeight),
-    [innerHeight],
-  );
 
   useEffect(() => {
     if (progress === 100)
@@ -28,12 +22,10 @@ export default function Cursor() {
           duration: 0.5,
           ease: "power2.out",
         });
-
         gsap.to(cursorCustom.current, {
           opacity: 100,
           duration: 0.5,
         });
-
         loaded();
       }, 1000);
   }, [progress]);
@@ -79,7 +71,7 @@ export default function Cursor() {
     >
       <svg
         ref={cursorFollower}
-        className={`w-full h-full -rotate-90 fixed mix-blend-difference pointer-events-none scale-${loadingBarScale}`}
+        className={`w-full h-full -rotate-90 fixed mix-blend-difference pointer-events-none scale-300 md:scale-400 lg:scale-500 xl:scale-600 2xl:scale-700`}
       >
         <circle
           className="transition-all duration-500 ease-out"

@@ -11,16 +11,18 @@ import Cursor from "../web/Cursor";
 import useExperience from "@/stores/useExperience";
 import { KEYBOARD_MAP, START_CAMERA_HEIGHT } from "@/resources/constants";
 import WelcomeText from "../web/WelcomeText";
+import Loading from "../web/Loading";
 
 export default function ExperienceCanvas() {
   const step = useExperience((state) => state.step);
 
   return (
-    <>
+    <div
+      className={`w-full h-full ${(step === "loading" || step === "ready") && "cursor-none"}`}
+    >
       <Leva collapsed />
       <KeyboardControls map={KEYBOARD_MAP}>
         <Canvas
-          className={`${step === "ready" && "cursor-none"}`}
           shadows={{ type: THREE.PCFShadowMap }}
           camera={{
             fov: 31,
@@ -34,12 +36,18 @@ export default function ExperienceCanvas() {
           </Physics>
         </Canvas>
       </KeyboardControls>
-      {step === "ready" && (
+
+      {(step === "loading" || step === "ready") && (
         <>
           <Cursor />
+          <Loading />
+        </>
+      )}
+      {step === "ready" && (
+        <>
           <WelcomeText />
         </>
       )}
-    </>
+    </div>
   );
 }

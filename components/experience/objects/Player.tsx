@@ -47,7 +47,7 @@ export default function Player() {
 
   // following
   useFrame((state, delta) => {
-    if (step === "falling" || step === "landed") return;
+    if (step === "loading" || step === "falling" || step === "landed") return;
 
     if (firstCameraPosition.current === null)
       firstCameraPosition.current = getCameraPosition(cursorFallPosition);
@@ -81,7 +81,7 @@ export default function Player() {
 
   // falling & landed
   useFrame((state, delta) => {
-    if (step === "ready" || step === "following") return;
+    if (step === "loading" || step === "ready" || step === "following") return;
 
     /**
      * Camera

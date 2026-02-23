@@ -1,18 +1,17 @@
 import { OrbitControls } from "@react-three/drei";
 import { Perf } from "r3f-perf";
-import Floor from "./Floor";
-import Title from "./Title";
-import Lights from "./Lights";
-import Bound from "./Bound";
+import Floor from "./maps/Floor";
+import Title from "./objects/Title";
+import Lights from "./environments/Lights";
+import Bound from "./maps/Bound";
 import useExperience from "@/stores/useExperience";
-import Player from "./Player";
-import FakePlane from "./FakePlane";
+import Player from "./objects/Player";
+import FakePlane from "./maps/FakePlane";
 import { FLAT_KEYBOARD_MAP, START_HEIGHT } from "@/resources/constants";
-import StartText from "./StartText";
 import { useThree } from "@react-three/fiber";
 import { useEffect } from "react";
 import { updateMousePosition } from "@/stores/useMouse";
-import Environments from "./Environments";
+import Environments from "./environments/Environments";
 
 export default function Experience() {
   const domElement = useThree((three) => three.gl.domElement);
@@ -58,13 +57,12 @@ export default function Experience() {
       <Title content="Web" size={0.5} offset={[-1.2, START_HEIGHT, 0.5]} />
       <Title content="Artist" size={0.5} offset={[0.5, START_HEIGHT, 0.5]} />
 
-      {step === "ready" && (
+      {(step === "loading" || step === "ready") && (
         <>
-          <StartText />
           <FakePlane />
         </>
       )}
-      {step !== "ready" && <Player />}
+      {step !== "loading" && step !== "ready" && <Player />}
 
       <Bound />
     </>

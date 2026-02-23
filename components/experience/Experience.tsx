@@ -57,11 +57,7 @@ export default function Experience() {
       <Title content="Web" size={0.5} offset={[-1.2, START_HEIGHT, 0.5]} />
       <Title content="Artist" size={0.5} offset={[0.5, START_HEIGHT, 0.5]} />
 
-      {(step === "loading" || step === "ready") && (
-        <>
-          <FakePlane />
-        </>
-      )}
+      {(step === "loading" || step === "ready") && <FakePlane />}
       {step !== "loading" && step !== "ready" && <Player />}
 
       <Bound />

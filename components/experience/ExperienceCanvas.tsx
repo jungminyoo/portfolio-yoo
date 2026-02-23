@@ -9,9 +9,10 @@ import * as THREE from "three";
 import Experience from "./Experience";
 import Cursor from "../web/Cursor";
 import useExperience from "@/stores/useExperience";
-import { KEYBOARD_MAP, START_CAMERA_HEIGHT } from "@/resources/constants";
+import { KEYBOARD_MAP } from "@/resources/constants";
 import WelcomeText from "../web/WelcomeText";
 import Loading from "../web/Loading";
+import DefaultCamera from "./environments/DefaultCamera";
 
 export default function ExperienceCanvas() {
   const step = useExperience((state) => state.step);
@@ -22,15 +23,8 @@ export default function ExperienceCanvas() {
     >
       <Leva collapsed />
       <KeyboardControls map={KEYBOARD_MAP}>
-        <Canvas
-          shadows={{ type: THREE.PCFShadowMap }}
-          camera={{
-            fov: 31,
-            near: 0.1,
-            far: 200,
-            position: [0, START_CAMERA_HEIGHT, 0],
-          }}
-        >
+        <Canvas shadows={{ type: THREE.PCFShadowMap }}>
+          <DefaultCamera />
           <Physics debug={false}>
             <Experience />
           </Physics>

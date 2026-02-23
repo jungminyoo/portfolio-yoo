@@ -4,8 +4,11 @@ import * as THREE from "three";
 import { START_HEIGHT } from "@/resources/constants";
 
 interface Experience {
+  innerHeight: number;
   step: "loading" | "ready" | "following" | "falling" | "landed";
   cursorFallPosition: THREE.Vector3Like;
+
+  setInnerHeight: (innerHeight: number) => void;
 
   loaded: () => void;
   follow: (clickPosition: THREE.Vector3) => void;
@@ -16,8 +19,15 @@ interface Experience {
 export default create(
   subscribeWithSelector<Experience>((set) => {
     return {
+      innerHeight: window.innerHeight,
+
       step: "loading",
       cursorFallPosition: { x: 0, y: START_HEIGHT, z: 0 },
+
+      setInnerHeight: (innerHeight) =>
+        set(() => ({
+          innerHeight,
+        })),
 
       loaded: () =>
         set((state) =>

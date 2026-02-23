@@ -3,16 +3,22 @@
 import useExperience from "@/stores/useExperience";
 import { useProgress } from "@react-three/drei";
 import gsap from "gsap";
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 
 export default function Cursor() {
   const progress = useProgress((state) => state.progress);
 
   const step = useExperience((state) => state.step);
   const loaded = useExperience((state) => state.loaded);
+  const innerHeight = useExperience((state) => state.innerHeight);
 
   const cursorCustom = useRef<HTMLDivElement>(null);
   const cursorFollower = useRef<SVGSVGElement>(null);
+
+  const loadingBarScale = useMemo(
+    () => Math.floor((5 / 9) * innerHeight),
+    [innerHeight],
+  );
 
   useEffect(() => {
     if (progress === 100)
@@ -73,7 +79,7 @@ export default function Cursor() {
     >
       <svg
         ref={cursorFollower}
-        className={`w-full h-full -rotate-90 fixed mix-blend-difference pointer-events-none scale-500`}
+        className={`w-full h-full -rotate-90 fixed mix-blend-difference pointer-events-none scale-${loadingBarScale}`}
       >
         <circle
           className="transition-all duration-500 ease-out"

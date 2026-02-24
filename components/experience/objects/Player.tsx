@@ -1,8 +1,12 @@
-import { START_CAMERA_HEIGHT, START_HEIGHT } from "@/resources/constants";
+import { START_CAMERA_HEIGHT } from "@/resources/constants";
 import { mainMaterial } from "@/resources/materials";
 import useExperience from "@/stores/useExperience";
 import useMouse from "@/stores/useMouse";
-import getCameraPosition from "@/utils/getCameraPosition";
+import {
+  getCameraPlaneTargetY,
+  getCameraPosition,
+  getCameraQuaternion,
+} from "@/utils/camera";
 import { useKeyboardControls } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
 import {
@@ -31,6 +35,7 @@ export default function Player() {
   const cursorBody = useRef<RapierRigidBody>(null!);
   const cursorMesh = useRef<THREE.Mesh>(null!);
   const firstCameraPosition = useRef<THREE.Vector3>(null);
+  const firstCameraQuaternion = useRef<THREE.Quaternion>(null);
 
   const [newPosition] = useState(() => new THREE.Vector3());
   const [targetPosition] = useState(() => new THREE.Vector3());
@@ -41,24 +46,45 @@ export default function Player() {
   const [smoothedCameraPosition] = useState(
     () => new THREE.Vector3(0, START_CAMERA_HEIGHT, 0),
   );
-  const [smoothedCameraTarget] = useState(
-    () => new THREE.Vector3(0, START_HEIGHT, 0),
-  );
+  const [smoothedCameraTarget] = useState(() => new THREE.Vector3(0, 0, 0));
 
   // following
   useFrame((state, delta) => {
-    if (step === "loading" || step === "falling" || step === "landed") return;
+    if (
+      step === "loading" ||
+      step === "ready" ||
+      step === "falling" ||
+      step === "landed"
+    )
+      return;
 
-    if (firstCameraPosition.current === null)
+    if (
+      firstCameraPosition.current === null ||
+      firstCameraQuaternion.current === null
+    ) {
       firstCameraPosition.current = getCameraPosition(cursorFallPosition);
+      firstCameraQuaternion.current = getCameraQuaternion(
+        firstCameraPosition.current,
+        cursorFallPosition,
+      );
+    }
 
     smoothedCameraPosition.lerp(firstCameraPosition.current, delta * 2);
-    smoothedCameraTarget.lerp(cursorFallPosition, delta * 2);
-
     state.camera.position.copy(smoothedCameraPosition);
-    state.camera.lookAt(smoothedCameraTarget);
 
-    if (smoothedCameraTarget.distanceTo(cursorFallPosition) < 0.5) fall();
+    state.camera.quaternion.slerp(firstCameraQuaternion.current, delta * 2.5);
+
+    if (smoothedCameraPosition.distanceTo(firstCameraPosition.current) < 0.5) {
+      // set current direction as initial direction of smoothedCameraTarget
+      smoothedCameraTarget.copy(
+        getCameraPlaneTargetY(
+          state.camera.position,
+          state.camera.quaternion,
+          cursorFallPosition.y,
+        ),
+      );
+      fall();
+    }
   });
 
   // falling -> landed

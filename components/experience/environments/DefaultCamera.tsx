@@ -14,6 +14,10 @@ export default function DefaultCamera() {
   const camera = useRef<THREE.PerspectiveCamera>(null!);
 
   useEffect(() => {
+    camera.current.lookAt(0, 0, 0);
+  }, []);
+
+  useEffect(() => {
     if (step !== "loading" && step !== "ready") return;
 
     const planeWidth = FLOOR_SCALE[0];

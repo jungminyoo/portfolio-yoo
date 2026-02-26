@@ -13,6 +13,7 @@ import { KEYBOARD_MAP } from "@/resources/constants";
 import WelcomeText from "../web/WelcomeText";
 import Loading from "../web/Loading";
 import DefaultCamera from "./environments/DefaultCamera";
+import Guide from "../web/Guide";
 
 export default function ExperienceCanvas() {
   const step = useExperience((state) => state.step);
@@ -24,6 +25,8 @@ export default function ExperienceCanvas() {
       <Leva collapsed />
       <KeyboardControls map={KEYBOARD_MAP}>
         <Canvas shadows={{ type: THREE.PCFShadowMap }}>
+          <color args={["#1b1b1b"]} attach="background" />
+
           <DefaultCamera />
           <Physics debug={false}>
             <Experience />
@@ -40,6 +43,11 @@ export default function ExperienceCanvas() {
       {step === "ready" && (
         <>
           <WelcomeText />
+        </>
+      )}
+      {(step === "following" || step === "falling" || step === "landed") && (
+        <>
+          <Guide />
         </>
       )}
     </div>
